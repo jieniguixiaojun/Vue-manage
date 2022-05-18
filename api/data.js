@@ -8,9 +8,10 @@ export const getMemu = (param) => {
     })
 }
 
-export const getData = (param) => {
+export const getData = () => {
     return axios.request({
         url: '/home/getData',
+        method: "get",
     })
 }
 
