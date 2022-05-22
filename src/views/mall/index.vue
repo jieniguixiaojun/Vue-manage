@@ -1,5 +1,5 @@
 <template>
-  <div>我是mall页面</div>
+  <div>商品管理页面</div>
 </template>
     
 <script>

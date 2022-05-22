@@ -3,15 +3,24 @@
     <el-col :span="8" style="margin-top: 20px">
       <el-card shadow="hover">
         <div class="user">
-          <img :src="userImg" />
+          <el-image
+            class="img-title"
+            :src="userImg"
+            :preview-src-list="srcList"
+          >
+          </el-image>
           <div class="userinfo">
             <p class="name">Admin</p>
             <p class="access">超级管理员</p>
           </div>
         </div>
         <div class="login-info">
-          <p>上次登录时间:<span>2022-7-15</span></p>
-          <p>上次登录地点:<span>江苏</span></p>
+          <p>
+            当前登录时间:<span>{{ positime }}</span>
+          </p>
+          <p>
+            当前登录地点:<span>{{ positionInfo }}</span>
+          </p>
         </div>
       </el-card>
       <el-card style="margin-top: 20px; height: 460px">
@@ -78,6 +87,7 @@ export default {
   data() {
     return {
       userImg: require("../../assets/images/user.png"),
+      srcList: [require("../../assets/images/user.png")],
       tableData: [],
       tableLabel: {
         name: "课程",
@@ -134,9 +144,17 @@ export default {
         },
         video: {},
       },
+      // 当前位置
+      positionInfo: "未知",
+      // 当前时间
+      positime: "",
     };
   },
   mounted() {
+    this.dingwei();
+    this.$nextTick(() => {
+      setInterval(this.getNowTime, 1000);
+    });
     getData().then((res) => {
       const { code, data } = res.data;
       if (code === 20000) {
@@ -184,6 +202,63 @@ export default {
         ],
       };
     });
+  },
+  methods: {
+    dingwei() {
+      AMap.plugin("AMap.Geolocation", () => {
+        var geolocation = new AMap.Geolocation({
+          // 是否使用高精度定位，默认：true
+          enableHighAccuracy: true,
+          // 设置定位超时时间，默认：无穷大
+          timeout: 10000,
+        });
+
+        geolocation.getCityInfo((status, result) => {
+          //只能获取当前用户所在城市和城市的经纬度
+          if (status == "complete") {
+            console.log("当前位置", result.province);
+            this.positionInfo = result.province;
+          }
+        });
+        geolocation.getCurrentPosition((status, result) => {
+          //获取用户当前的精确位置
+          if (status == "complete") {
+          }
+        });
+      });
+    },
+    //获取当前时间
+    getNowTime() {
+      var date = new Date();
+      //年 getFullYear()：四位数字返回年份
+      var year = date.getFullYear(); //getFullYear()代替getYear()
+      //月 getMonth()：0 ~ 11
+      var month = date.getMonth() + 1;
+      //日 getDate()：(1 ~ 31)
+      var day = date.getDate();
+      //时 getHours()：(0 ~ 23)
+      var hour = date.getHours();
+      //分 getMinutes()： (0 ~ 59)
+      var minute = date.getMinutes();
+      //秒 getSeconds()：(0 ~ 59)
+      var second = date.getSeconds();
+      var time =
+        year +
+        "-" +
+        this.addZero(month) +
+        "-" +
+        this.addZero(day) +
+        " " +
+        this.addZero(hour) +
+        ":" +
+        this.addZero(minute) +
+        ":" +
+        this.addZero(second);
+      return (this.positime = time);
+    },
+    addZero(s) {
+      return s < 10 ? "0" + s : s;
+    },
   },
 };
 </script>

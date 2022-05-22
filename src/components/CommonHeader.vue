@@ -48,6 +48,15 @@ export default {
       this.$store.commit("clearToken");
       this.$store.commit("clearMenu");
       this.$router.push("/login");
+      sessionStorage.removeItem("tabViews");
+      this.$store.state.tab.tabsList = [
+        {
+          path: "/",
+          name: "home",
+          label: "首页",
+          icon: "home",
+        },
+      ];
     },
   },
   computed: {

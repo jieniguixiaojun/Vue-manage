@@ -24,7 +24,6 @@ import {
   Tag,
   Form,
   FormItem,
-
   Select,
   Switch,
   DatePicker,
@@ -33,7 +32,8 @@ import {
   Input,
   Pagination,
   MessageBox,
-  Message
+  Message,
+  Image
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/less/index.less'
@@ -76,6 +76,7 @@ Vue.use(Dialog)
 Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Pagination)
+Vue.use(Image)
 
 Vue.prototype.$http = http
 Vue.prototype.$confirm = MessageBox.confirm
